@@ -1,0 +1,67 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Admins are listed in admins/{uid}; only the Firebase project owner can add them (console/CLI).
+    function isAdmin() {
+      return request.auth != null && exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
+
+    // Hosts (run posts 2, 4, 5) are listed in hosts/{uid}; only admins add or remove them.
+    function isHost() {
+      return request.auth != null && exists(/databases/$(database)/documents/hosts/$(request.auth.uid));
+    }
+
+    function isOwner(uid) {
+      return request.auth != null && request.auth.uid == uid;
+    }
+
+    match /admins/{uid} {
+      allow read: if isOwner(uid);
+      allow write: if false;
+    }
+
+    match /hosts/{uid} {
+      allow read: if isOwner(uid) || isAdmin();
+      allow create, delete: if isAdmin();
+      allow update: if false;
+    }
+
+    // Public scoreboard: anyone (even signed out) can read team name + credit.
+    // A team (or a host awarding fc) may only write a copy that matches the team doc after the write.
+    match /scoreboard/{uid} {
+      allow read: if true;
+      allow create, update: if isAdmin() || ((isOwner(uid) || isHost())
+        && request.resource.data.keys().hasOnly(['teamName', 'credit'])
+        && request.resource.data.teamName == getAfter(/databases/$(database)/documents/teams/$(uid)).data.teamName
+        && request.resource.data.credit == getAfter(/databases/$(database)/documents/teams/$(uid)).data.credit);
+      allow delete: if isAdmin();
+    }
+
+    // One document per team, keyed by the team's auth uid. A team can only see its own data.
+    match /teams/{uid} {
+      allow read: if isOwner(uid) || isAdmin() || isHost();
+      // Host accounts never get a team
+      allow create: if isOwner(uid) && !isHost()
+        && request.resource.data.credit == 100
+        && request.resource.data.teamName is string
+        && request.resource.data.teamName.size() > 0
+        && request.resource.data.teamName.size() <= 40;
+      allow update: if (isOwner(uid)
+        && request.resource.data.teamName == resource.data.teamName
+        && request.resource.data.credit is int)
+        || isAdmin()
+        // Hosts may only change the score and their per-post points (rev = change counter)
+        || (isHost()
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['credit', 'hostPoints', 'rev'])
+          && request.resource.data.credit is int);
+      allow delete: if isAdmin();
+
+      // Audit log of every credit change (admins and hosts add entries when they award fc)
+      match /log/{entry} {
+        allow read, create: if isOwner(uid);
+        allow create: if isHost();
+        allow read, create, delete: if isAdmin();
+      }
+    }
+  }
+}

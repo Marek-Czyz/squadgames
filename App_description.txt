@@ -1,0 +1,130 @@
+Make an webb-app (preferably react-app.
+
+General
+
+The app shall utilize colors and schemes provided in the folder "Assets"
+The app shall have a logo provided in "Assets"
+The app will be hosted in firebase and requires simple login (e-mail and password)
+The data of this app will be kept in firebase database (like the score of the game)
+The app will be used by 5-10 teams. The data structure will be created on the first login of a new "user".
+The user will be asked to enter the team name, then the database structure for this team will be estabilished.
+
+
+The app functionality:
+
+After login the app will show the name of the team logged inn, and their current credit in valuta "fc" on the top
+
+The app will facilitate a live game, that consist of 5 different "posts". The posts will be presented in the main view as 5 selectable "cards". When selected card, the view of this particular post is shown and a button "back" to get back to the main menu.
+
+The posts:
+
+1. " What is this? What is what?"
+
+This task is about quessing the name of an object. The screen will show a simple text entry, and a button "quess". The correct answer (or list of) will be provided in a secret file in ../Secrets/post1.ini
+When the name is quessed correctly the credit ncreases by 50fc and the post gets closed for that team - field grayed out (not possible to guess again), if the answer is not correct the screen says "incorrect, next guess in: <counts down 59s>".
+
+Below the text box place two buttons "buy time" and "buy hint". The first button deducts 5fc form the score, the second button deducts 10fc from the score and reveals a hint in order, provided in the file ../Secrets/hint1.ini  
+
+
+
+2. "The art of engineering"
+
+This post will be handled manually by a host that can "grant" money to a team after fullfilling it. The page shall show a number field where the host may write the amount of fc's (may also be negative) then a field for password, and a button "grant". When the admin enters the correct password, provided in ../Secrets/post2.ini, the amount of credits entered is added to the pot of this team. This can be done several times, but the password must be re-entered every time.
+
+3. "Knowledge is king"
+
+This page shows a list of 12 cards, 6 questions, 6 riddles. Make the riddles and questions utilize different colors, use gradient according to their "price":
+
+   - Question 1 (3fc)
+   - Question 2 (5fc)
+   - Question 3 (10fc)
+   - Question 4 (10fc)
+   - Question 5 (10fc)
+   - Question 6 (10fc) 
+
+   - Riddle 1 (10fc)
+   - Riddle 2 (15fc)
+   - Riddle 3 (20fc)
+   - Riddle 4 (30fc)
+   - Riddle 5 (50fc)
+   - Riddle 6 (60fc)
+
+When selecting a card, the pop up asks "Do you really want to buy this?" and Yes No - buttons. When yes selected the amount of fc is deducted from the account, and the Question/Riddle is revealed. The questions are multi choice selectable with options A,B,C,D, the riddles has a text fiekld to provide a correct answer.
+
+The list of questions and riddles is provided in ../Secrets/questions.ini
+The correct answers in ../Secrets/answers.ini
+
+If the answer is provided correctly, the amount is doubled back (i.e. 10fc deducted, +20fc granted) and the question is disabled (grayed out). If the answer is incorrect, the question goes back to the "hidden" mode, and the team may "purchase" it again same way as before.
+
+
+4. "Show it, not tell it"
+
+This post will be handled manually by a host that can "grant" money to a team after fullfilling it. The page shall show a number field where the host may write the amount of fc's (may also be negative) then a field for password, and a button "grant". When the admin enters the correct password, provided in ../Secrets/post4.ini, the amount of credits entered is added to the pot of this team. This can be done several times, but the password must be re-entered every time.
+
+
+5. "Tic-Tac-Run"
+
+This post will be handled manually by a host that can "grant" money to a team after fullfilling it. The page shall show a number field where the host may write the amount of fc's (may also be negative) then a field for password, and a button "grant". When the admin enters the correct password, provided in ../Secrets/post5.ini, the amount of credits entered is added to the pot of this team. This can be done several times, but the password must be re-entered every time.
+
+
+Update 2 03.11.2026
+
+Make the scoreboard available publicly. Everyone that opens the app can se a simple table with team names and score in order. 
+
+Post1:
+
+The text shall say: "Study the hidden item, then type what you think it is. No cf loss for wrong answer. (If you know the answer, the host may help you spell it correctly.)"
+
+Post2:
+
+The window shall have text:
+
+"Build a bridge using the set provided. The team shall cross the bridge one by one. +10fc reward for each member (max 50fc)." 
+"When the task is completed, you will receive a code from your host to redeem your fc's"
+
+Then the panel shall only have one field called "Code" and a button "Claim reward".
+(wrong code does nothing)
+
+The code is the password, followed by an integer number. If the password is correct the number is added to the pot. F.ex "password50" gives reward of 50 if the password in secrets was "password".
+Very important: when the task is completed the panel for reward disappears and text "Task completed. You gained: ...". So it is not possible to gain it again.
+
+Post3:
+"Place your bet on a card according to prices, then answer it. Correct answer - win the bet. Wrong answer - your fc's are gone. You may bet again, until you find the correct answer."   
+
+The Riddle 5 and Riddle 6 has number as answer. Leave it as it is. The riddles 1 - 4 shall have following under-text:
+"Answer to this riddle is not a number. Tell your answer to the Game Master to grant your reward if correct."
+
+In the Admin panel, make it possible for the admin to press the badge of the riddle and get a pop-up with choiice: grant reward or incorrect. It may simply be a green V and red X.
+
+
+Post 4
+
+"Engineering alias. Compete against another team in 10 rounds. Each win gives +5fc (max 50fc). When the game is finished you will receive a reward code from the host"
+
+Then the panel shall only have one field called "Code" and a button "Claim reward". 
+(wrong code does nothing)
+
+The code is the password, followed by an integer number. If the password is correct the number is added to the pot. F.ex "password50" gives reward of 50 if the password in secrets was "password".
+Very important: when the task is completed the panel for reward disappears and text "Game ended. You gained: ...". So it is not possible to gain it again.
+
+Post 5
+
+"Tic - Tac - Run!" - Compete against another team in 5 rounds. Each win gives +5fc from the others team's pot. When the game is finished you will receive a reward code from the host"
+
+Then the panel shall only have one field called "Code" and a button "Claim reward". 
+(wrong code does nothing)
+
+The code is the password, followed by an integer number. If the password is correct the number is added to the pot. F.ex "password50" gives reward of 50 if the password in secrets was "password".
+Very important: when the task is completed the panel for reward disappears and text "Game ended. You gained: ...". So it is not possible to gain it again.
+
+Update 3:
+
+Make another level of user, the "host". 
+-Only Admin can add the host (create an account). 
+-The host account will not create a team automatically as for the normal users.
+- The host will only have access to grant fc's in Post 2, 4 and 5.
+- The way it happens: the list of all registered teams are displayed with two buttons: "+5fc" and "-5fc" for Post 4 and 5. "+10fc" and "-10fc" for post 2. The host can push the buttons to increase or reduce the score for that team.
+- The admin of the game (Game master) will also have access to the same function.
+  
+You may then remove all functionality of the passwords and codes in the Post 2,4 and 5
+

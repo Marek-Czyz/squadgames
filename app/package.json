@@ -1,0 +1,38 @@
+{
+  "name": "squad-games",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "secrets": "node scripts/build-secrets.mjs",
+    "predev": "npm run secrets",
+    "dev": "vite",
+    "dev:emu": "vite --mode emulator",
+    "emulators": "firebase emulators:start --only auth,firestore --project demo-squad-games",
+    "prebuild": "npm run secrets",
+    "build": "vite build",
+    "deploy": "npm run build && firebase deploy --only hosting,firestore:rules",
+    "test": "vitest run src",
+    "lint": "oxlint",
+    "preview": "vite preview",
+    "test:rules": "firebase emulators:exec --only firestore --project demo-rules \"vitest run tests\"",
+    "test:e2e": "node scripts/e2e.mjs"
+  },
+  "dependencies": {
+    "@fontsource/dm-sans": "^5.3.0",
+    "@fontsource/fraunces": "^5.3.0",
+    "firebase": "^13.1.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  },
+  "devDependencies": {
+    "@firebase/rules-unit-testing": "^6.0.0",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.2",
+    "oxlint": "^1.89.0",
+    "playwright-core": "^1.64.1",
+    "vite": "^8.3.5",
+    "vitest": "^5.0.5"
+  }
+}

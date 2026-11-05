@@ -1,0 +1,17 @@
+# Never publish: quiz answers, hints and questions
+Secrets/
+Game_description.txt
+Notes.txt
+
+# Company template (large, internal) and Office lock files
+EASEE GENERAL PRESENTATION.pptx
+~$*
+
+# Build output, dependencies, local config
+node_modules/
+app/dist/
+app/src/generated/
+app/.firebase/
+*.local
+*-debug.log
+.DS_Store
